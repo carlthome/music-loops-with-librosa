@@ -1,0 +1,49 @@
+images:
+  - $_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:latest
+
+substitutions:
+  _SERVICE_NAME: looper
+  _DEPLOY_REGION: europe-west4
+  _GCR_HOSTNAME: gcr.io
+
+options:
+  env:
+    - DOCKER_BUILDKIT=1
+
+steps:
+  - name: docker:20.10.6
+    args:
+      - build
+      - --target=base
+      - --cache-from=$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:cache
+      - --tag=$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:cache
+      - .
+
+  - name: docker:20.10.6
+    args:
+      - push
+      - $_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:cache
+
+  - name: docker:20.10.6
+    args:
+      - build
+      - --target=serve
+      - --cache-from=$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:cache
+      - --tag=$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:latest
+      - .
+
+  - name: docker:20.10.6
+    args:
+      - push
+      - $_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:latest
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:339.0.0-alpine
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - $_SERVICE_NAME
+      - --platform=managed
+      - --project=$PROJECT_ID
+      - --image=$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:latest
+      - --region=$_DEPLOY_REGION
