@@ -1,0 +1,31 @@
+{
+	"name": "Existing Dockerfile",
+	"context": "..",
+	"dockerFile": "../Dockerfile",
+	"build": {
+		"target": "develop",
+		"args": {
+			"user": "${env:USER}"
+		}
+	},
+	"extensions": [
+		"googlecloudtools.cloudcode",
+		"ms-python.python",
+		"ms-python.vscode-pylance"
+	],
+	"mounts": [
+		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+		"source=${env:HOME}${env:USERPROFILE}/.config/gcloud,target=/home/${env:USER}/.config/gcloud,type=bind",
+	],
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"cloudcode.yaml.format.enable": true,
+		"python.pythonPath": "/usr/local/bin/python",
+		"python.linting.enabled": true,
+		"python.linting.mypyPath": "/usr/local/bin/mypy",
+		"python.formatting.provider": "black",
+		"python.formatting.blackPath": "/usr/local/bin/black",
+		"python.testing.pytestEnabled": true,
+		"python.testing.pytestPath": "/usr/local/bin/pytest",
+	}
+}
