@@ -5,7 +5,7 @@
 	"build": {
 		"target": "develop",
 		"args": {
-			"user": "${env:USER}"
+			"user": "${env:USERNAME}"
 		}
 	},
 	"extensions": [
@@ -15,7 +15,7 @@
 	],
 	"mounts": [
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-		"source=${env:HOME}${env:USERPROFILE}/.config/gcloud,target=/home/${env:USER}/.config/gcloud,type=bind",
+		"source=${env:HOME}${env:USERPROFILE}/.config/gcloud,target=/home/${env:USERNAME}/.config/gcloud,type=bind",
 	],
 	"settings": {
 		"terminal.integrated.shell.linux": "/bin/bash",
