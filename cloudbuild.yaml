@@ -47,3 +47,4 @@ steps:
       - --project=$PROJECT_ID
       - --image=$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:latest
       - --region=$_DEPLOY_REGION
+      - --allow-unauthenticated
